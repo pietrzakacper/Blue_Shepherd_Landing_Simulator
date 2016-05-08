@@ -1,14 +1,18 @@
 #include "Player.h"
 
-Player::Player(std::string texturePath, sf::Vector2f velVec, float fuel, float elect) :GameObject(texturePath, velVec)
+Player::Player(std::string texturePath, sf::Vector2f velVec, float fuel, float elect, float grav)
+	:GameObject(texturePath, velVec),
+	gravity(grav)
 {
 	m_rocketEngineFuel = fuel;
 	m_electricity = elect;
 }
 
-void Player::Update(float fps, float gravity, float wind)
+void Player::Update(float fps, float wind)
 {
-	m_sprite.move((m_velocityVector.x += wind) * fps, (m_velocityVector.y += gravity) * fps);
+	m_velocityVector.y += gravity;
+	m_velocityVector.x += wind;
+	m_sprite.move(m_velocityVector.x * fps, m_velocityVector.y * fps);
 }
 
 void Player::CheckEvents(sf::Event & event)

@@ -7,11 +7,12 @@ class Player :public GameObject
 {
 	float m_rocketEngineFuel;
 	float m_electricity;
-	const float m_TRUST = 50.f;
+	const float m_TRUST = 80.f;
+	float gravity;
 
 public:
-	Player(std::string texturePath, sf::Vector2f velVec, float fuel, float elect);
+	Player(std::string texturePath, sf::Vector2f velVec, float fuel, float elect, float grav);
 	
-	void Update(float, float, float);
+	void Update(float, float);
 	void CheckEvents(sf::Event&);
 };
