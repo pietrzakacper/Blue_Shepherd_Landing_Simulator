@@ -258,3 +258,4 @@ paket-files/
 *.filters
 QuickSort.vcxproj
 QuickSort.vcxproj.filters
+*.dll
