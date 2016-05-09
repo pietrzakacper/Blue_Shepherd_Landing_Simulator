@@ -13,10 +13,12 @@ class Player :public GameObject
 	float gravity;
 	float defaultRotation;
 	bool horizontalInput = false;
-
+	bool isEngineOn = false;
+	bool isEngineOnTextureShowed = false;
 public:
 	Player(std::string texturePath, sf::Vector2f velVec, float fuel, float elect, float grav);
 	
 	void Update(float, float);
 	void CheckEvents();
+
 };

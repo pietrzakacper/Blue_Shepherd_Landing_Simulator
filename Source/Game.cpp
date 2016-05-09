@@ -5,7 +5,7 @@ Game::Game(int width, int height, int fps)
 	m_window.create(sf::VideoMode(width, height), "Green Shepherd Landing Simulator | 0.1", sf::Style::Close);
 	m_window.setFramerateLimit(fps);
 
-	m_player = new Player("Data/test_obj.png", sf::Vector2f(0, 0), 10, 10, m_GRAVITY);
+	m_player = new Player("Data/rocketspritesheet.png", sf::Vector2f(0, 0), 10, 10, m_GRAVITY);
 	//Reszta obiektow do wczytania bedzie tutaj...
 }
 

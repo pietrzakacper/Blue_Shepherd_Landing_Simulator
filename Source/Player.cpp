@@ -24,6 +24,12 @@ void Player::Update(float fps, float wind)
 	
 	m_velocityVector.x *= 0.95;
 	
+	if ((isEngineOn && !isEngineOnTextureShowed) || (!isEngineOn && isEngineOnTextureShowed))
+	{
+		m_sprite.setTextureRect(sf::IntRect(static_cast<int>(!isEngineOn) * 58, 0, 58, 134));
+		if (isEngineOn)isEngineOnTextureShowed = true;
+		else isEngineOnTextureShowed = false;
+	}
 	
 }
 
@@ -52,8 +58,8 @@ void Player::CheckEvents()
 
 		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Space))
 		{
-			if (m_velocityVector.y > -120.f)m_velocityVector.y -= m_TRUST;
-
+			if (m_velocityVector.y > -180.f)m_velocityVector.y -= m_TRUST;
+			if(!isEngineOn)isEngineOn = true;
 			//if (m_rocketEngineFuel - engineFuelConsuption < 0)
 			//{
 			//	m_rocketEngineFuel = 0;
@@ -65,6 +71,10 @@ void Player::CheckEvents()
 			//}
 			//
 			//std::cout << m_rocketEngineFuel << "\n";
+		}
+		else
+		{
+			if (isEngineOn)isEngineOn = false;
 		}
 	
 }

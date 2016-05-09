@@ -8,6 +8,8 @@ GraphicAttributes::GraphicAttributes(std::string texturePath)
 	}
 
 	m_sprite.setTexture(m_texture);
+	m_texture.setSmooth(true);
+	m_sprite.setTextureRect(sf::IntRect(58, 0, 58, 134));
 }
 
 sf::Texture GraphicAttributes::GetTexture()
