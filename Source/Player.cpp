@@ -27,7 +27,7 @@ void Player::Update(float fps, float wind)
 	
 }
 
-void Player::CheckEvents(sf::Event & event)
+void Player::CheckEvents()
 {
 	float engineFuelConsuption = 0.0f;
 

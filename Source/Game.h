@@ -19,5 +19,4 @@ private:
 	void drawAll();
 	void updateAll(float);
 	void handleCollisions();
-	void checkEvents(sf::Event&);
 };

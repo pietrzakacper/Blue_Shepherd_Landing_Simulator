@@ -16,13 +16,17 @@ void Game::Play()
 	sf::Event event;
 
 	while(m_window.isOpen())
-	{ 
+	{
+		m_player->CheckEvents();
 		while (m_window.pollEvent(event))
 		{
-			checkEvents(event);
+			if (event.type == sf::Event::Closed)
+			{
+				m_window.close();
+			}
 		}
 
-		//handleCollisions();
+		//handleCollisions(); //TODO
 
 		updateAll(frameTime.asSeconds());
 		drawAll();
@@ -46,12 +50,3 @@ void Game::updateAll(float fps)
 	m_player->Update(fps, 0);
 }
 
-void Game::checkEvents(sf::Event & event)
-{
-	if (event.type == sf::Event::Closed)
-	{
-		m_window.close();
-	}
-
-	m_player->CheckEvents(event);
-}

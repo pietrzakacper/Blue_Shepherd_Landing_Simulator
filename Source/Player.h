@@ -18,5 +18,5 @@ public:
 	Player(std::string texturePath, sf::Vector2f velVec, float fuel, float elect, float grav);
 	
 	void Update(float, float);
-	void CheckEvents(sf::Event&);
+	void CheckEvents();
 };
