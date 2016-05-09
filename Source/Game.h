@@ -1,7 +1,7 @@
 #pragma once
 
 #include "Player.h"
-
+ 
 class Game
 {
 	sf::RenderWindow m_window;

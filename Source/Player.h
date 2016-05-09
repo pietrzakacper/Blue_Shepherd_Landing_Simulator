@@ -15,10 +15,14 @@ class Player :public GameObject
 	bool horizontalInput = false;
 	bool isEngineOn = false;
 	bool isEngineOnTextureShowed = false;
+
 public:
 	Player(std::string texturePath, sf::Vector2f velVec, float fuel, float elect, float grav);
-	
+
 	void Update(float, float);
 	void CheckEvents();
 
+private:
+	void decreaseFuel();
+	void decreaseElectricity();
 };

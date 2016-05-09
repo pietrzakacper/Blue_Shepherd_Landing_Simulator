@@ -2,11 +2,13 @@
 
 Game::Game(int width, int height, int fps)
 {
-	m_window.create(sf::VideoMode(width, height), "Green Shepherd Landing Simulator | 0.1", sf::Style::Close);
+	m_window.create(sf::VideoMode(width, height), "Blue Shepherd Landing Simulator | 0.1", sf::Style::Close);
 	m_window.setFramerateLimit(fps);
 
-	m_player = new Player("Data/rocketspritesheet.png", sf::Vector2f(0, 0), 10, 10, m_GRAVITY);
-	//Reszta obiektow do wczytania bedzie tutaj...
+	m_player = new Player("Data/rocketspritesheet.png", sf::Vector2f(0, 0), 100000, 100000, m_GRAVITY);
+	m_background = new GraphicAttributes("Data/Concept.png");
+	m_floor = new GraphicAttributes("Data/landingzone.png");
+	m_floor->SetPosition(sf::Vector2f((1280 / 2) - m_floor->GetSprite().getGlobalBounds().width / 2, 720 - m_floor->GetSprite().getGlobalBounds().height));
 }
 
 void Game::Play()
@@ -26,7 +28,7 @@ void Game::Play()
 			}
 		}
 
-		//handleCollisions(); //TODO
+		handleCollisions(); 
 
 		updateAll(frameTime.asSeconds());
 		drawAll();
@@ -40,13 +42,39 @@ void Game::drawAll()
 {
 	m_window.clear();
 
+	m_window.draw(*m_background);
 	m_window.draw(*m_player);
-
+	m_window.draw(*m_floor);
+	
 	m_window.display();
 }
 
 void Game::updateAll(float fps)
 {
 	m_player->Update(fps, 0);
+}
+
+void Game::handleCollisions()
+{
+	if (m_player->IsColliding(m_floor->GetSprite()))
+	{
+		if (m_player->GetSprite().getRotation() > 345.f || m_player->GetSprite().getRotation() < 25.f)
+		{
+			if (m_player->GetVelocityVector().y >= 150)
+			{
+				std::cout << "\n\tLadowanie nieudane! (zbyt duza predkosc)\n";
+			}
+
+			std::cout << "\n\tLadowanie udane!\n";
+		}
+		else
+		{
+			std::cout << "\n\tLadowanie nieudane! (zly kat)\n";
+		}
+	}
+	else if (m_player->GetPosition().y > m_floor->GetPosition().y)
+	{
+		std::cout << "\n\tLadowanie nieudane! (ominieto platforme)\n";
+	}
 }
 
