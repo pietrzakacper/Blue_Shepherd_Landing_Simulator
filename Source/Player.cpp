@@ -7,8 +7,8 @@ Player::Player(std::string texturePath, sf::Vector2f velVec, float fuel, float e
 	m_rocketEngineFuel = fuel;
 	m_electricity = elect;
 	m_sprite.setPosition((1280 - m_sprite.getGlobalBounds().width) / 2.f, 0);
-	defaultRotation = m_sprite.getRotation();
 	m_sprite.setTextureRect(sf::IntRect(58, 0, 58, 134));
+	//TODO change pivot here and consider this while checking collisions
 }
 
 void Player::Update(float fps, float wind)
@@ -19,34 +19,28 @@ void Player::Update(float fps, float wind)
 	
 	if (horizontalInput)
 	{
+		decreaseElectricity();
 		m_sprite.rotate(rotateAngleValue * fps);
 	}
-
 	else
 	{
-		if (m_sprite.getRotation() > 180)m_sprite.rotate(5 * fps);
+		if (m_sprite.getRotation() > 180)m_sprite.rotate(5* fps);
 		else if (m_sprite.getRotation() <180)m_sprite.rotate(-5 * fps);
+		//TODO enhance rotation and make it relative to Y axis speed
 	}
 
-	decreaseFuel();
-	decreaseElectricity();
-	
+	if (isEngineOn)
+		decreaseFuel();
+		
 	m_velocityVector.x *= 0.95;
-	
-	if ((isEngineOn && !isEngineOnTextureShowed) || (!isEngineOn && isEngineOnTextureShowed))
-	{
-		m_sprite.setTextureRect(sf::IntRect(static_cast<int>(!isEngineOn) * 58, 0, 58, 134));
-		if (isEngineOn)isEngineOnTextureShowed = true;
-		else isEngineOnTextureShowed = false;
-	}
-	
+	//TODO make user interface 
 	std::cout << "Paliwo: " << m_rocketEngineFuel << "\n";
 	std::cout << "Elektrycznosc:" << m_electricity << "\n";
 	std::cout << "Obrot: " << m_sprite.getRotation() << "\n";
 	std::cout << "Predkosc: " << m_velocityVector.y << "\n";
 }
 
-void Player::CheckEvents()
+void Player::CheckRealTimeEvents()
 {
 	float engineFuelConsuption = 0.0f;
 
@@ -70,60 +64,56 @@ void Player::CheckEvents()
 		{
 			horizontalInput = false;
 		}
+	}
 
-		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Space))
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Space) && m_rocketEngineFuel)
+	{
+			
+			
+		if (m_velocityVector.y > -180.f)
 		{
-			//tylko wtedy gdy jest paliwo
-			if (!m_rocketEngineFuel <= 0)
-			{
-				if (m_velocityVector.y > -180.f)
-				{
-					m_velocityVector.y -= m_TRUST;
-				}
+			m_velocityVector.y -= m_TRUST;
+		}
 
-				if (!isEngineOn)
-				{
-					isEngineOn = true;
-				}
-			}
-		}
-		else
+		if (!isEngineOn)
 		{
-			if (isEngineOn)
-			{
-				isEngineOn = false;
-			}
+			isEngineOn = true;
 		}
+			
+	}
+	else
+	{
+		if (isEngineOn)
+		{
+			isEngineOn = false;
+		}
+	}
+	
+}
+
+void Player::CheckEvents(sf::Event & event)
+{
+	if (event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::Space)
+	{
+		m_sprite.setTextureRect(sf::IntRect(0, 0, 58, 134));
+	}
+	else if (event.type == sf::Event::KeyReleased && event.key.code == sf::Keyboard::Space)
+	{
+		m_sprite.setTextureRect(sf::IntRect(58, 0, 58, 134));
 	}
 }
 
 void Player::decreaseFuel()
 {
-	float engineFuelConsuption = 0.1;
-
-	if (isEngineOn)
+	if (!m_rocketEngineFuel)
 	{
-		if (m_rocketEngineFuel - engineFuelConsuption < 0)
-		{
-			m_rocketEngineFuel = 0;
-			isEngineOn = false;
-		}
-		else
-		{
-			m_rocketEngineFuel -= engineFuelConsuption;
-		}
+		isEngineOn = false;
+		return;
 	}
+	m_rocketEngineFuel -= 0.1f;
 }
 
 void Player::decreaseElectricity()
 {
-	float value = 0.1;
-
-	//jesli jest poruszany to odejmuje wieksza wartosc
-	if (horizontalInput)
-	{
-		value += 1.f;
-	}
-
-	m_electricity -= value;
+	m_electricity -= 1.f;
 }

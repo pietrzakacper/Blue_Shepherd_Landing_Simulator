@@ -11,16 +11,15 @@ class Player :public GameObject
 	const float steerForce = 20.f;
 	float rotateAngleValue = 0.f;
 	float gravity;
-	float defaultRotation;
 	bool horizontalInput = false;
 	bool isEngineOn = false;
-	bool isEngineOnTextureShowed = false;
 
 public:
 	Player(std::string texturePath, sf::Vector2f velVec, float fuel, float elect, float grav);
 
 	void Update(float, float);
-	void CheckEvents();
+	void CheckRealTimeEvents();
+	void CheckEvents(sf::Event & event);
 
 private:
 	void decreaseFuel();

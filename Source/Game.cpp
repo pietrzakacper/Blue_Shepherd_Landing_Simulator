@@ -19,13 +19,14 @@ void Game::Play()
 
 	while(m_window.isOpen())
 	{
-		m_player->CheckEvents();
+		m_player->CheckRealTimeEvents();
 		while (m_window.pollEvent(event))
 		{
 			if (event.type == sf::Event::Closed)
 			{
 				m_window.close();
 			}
+			m_player->CheckEvents(event);
 		}
 
 		handleCollisions(); 

@@ -19,4 +19,7 @@ private:
 	void drawAll();
 	void updateAll(float);
 	void handleCollisions();
+	//TODO handlefailure
+	//TODO handlevictory
+
 };
