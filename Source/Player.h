@@ -2,6 +2,7 @@
 
 #include "GameObject.h"
 #include <iostream>
+#include "ParticleSystem.h"
 
 class Player :public GameObject
 {
@@ -20,7 +21,7 @@ public:
 	void Update(float, float);
 	void CheckRealTimeEvents();
 	void CheckEvents(sf::Event & event);
-
+	ParticleSystem* partSys;
 private:
 	void decreaseFuel();
 	void decreaseElectricity();

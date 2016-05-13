@@ -17,6 +17,9 @@ void Game::Play()
 	sf::Time frameTime;
 	sf::Event event;
 
+	srand(time(NULL));
+
+
 	while(m_window.isOpen())
 	{
 		m_player->CheckRealTimeEvents();
@@ -43,8 +46,10 @@ void Game::drawAll()
 {
 	m_window.clear();
 
-	m_window.draw(*m_background);
+	//m_window.draw(*m_background);
+	m_window.draw(*m_player->partSys);
 	m_window.draw(*m_player);
+
 	m_window.draw(*m_floor);
 	
 	m_window.display();
