@@ -5,21 +5,36 @@ Player::Player(std::string texturePath, sf::Vector2f velVec, float fuel, float e
 	gravity(grav),
 	partSys(new ParticleSystem(500))
 {
-	m_rocketEngineFuel = fuel;
-	m_electricity = elect;
 	m_sprite.setOrigin(11, 57);
-	m_sprite.setPosition(1280/2.f, 0);
 	m_sprite.setTextureRect(sf::IntRect(0, 0, 22, 57));
 	m_sprite.setScale(sf::Vector2f(2, 2));
 	//TODO change pivot here and consider this while checking collisions
 	
 	m_animationClock.restart();
 	m_currentSprite = 1;
+
+	Respawn(elect, fuel);
+}
+
+float Player::GetFuel()
+{
+	return m_rocketEngineFuel;
+}
+
+float Player::GetElectricity()
+{
+	return m_electricity;
+}
+
+bool Player::LegsDeployed()
+{
+	return legsDeployed;
 }
 
 void Player::Update(float fps, float wind)
 {
 	changeSprite();
+	decreaseElectricity(fps);
 	partSys->SetEmitterPosition(m_sprite.getPosition());
 	
 	partSys->Update(fps, isEngineOn);
@@ -29,7 +44,6 @@ void Player::Update(float fps, float wind)
 	
 	if (horizontalInput)
 	{
-		decreaseElectricity();
 		m_sprite.rotate(rotateAngleValue * fps );
 	}
 	else
@@ -72,28 +86,28 @@ void Player::CheckRealTimeEvents()
 		{
 			horizontalInput = false;
 		}
+
+		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Space) && m_rocketEngineFuel)
+		{
+			if (m_velocityVector.y > -180.f)
+			{
+				m_velocityVector.y -= m_TRUST;
+			}
+
+			if (!isEngineOn)
+			{
+				isEngineOn = true;
+			}
+			else
+			{
+				if (isEngineOn)
+				{
+					isEngineOn = false;
+				}
+			}
+		}
 	}
 
-	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Space) && m_rocketEngineFuel)
-	{			
-		if (m_velocityVector.y > -180.f)
-		{
-			m_velocityVector.y -= m_TRUST;
-		}
-
-		if (!isEngineOn)
-		{
-			isEngineOn = true;
-		}
-			
-	}
-	else
-	{
-		if (isEngineOn)
-		{
-			isEngineOn = false;
-		}
-	}
 	
 }
 
@@ -119,9 +133,17 @@ void Player::decreaseFuel()
 	m_rocketEngineFuel -= 0.1f;
 }
 
-void Player::decreaseElectricity()
+void Player::decreaseElectricity(float fps)
 {
-	m_electricity -= 1.f;
+	float val = 10.f;
+
+
+	if (horizontalInput)
+	{
+		val *= 2;
+	}
+
+	m_electricity -= val * fps;
 }
 
 void Player::changeSprite()
@@ -132,10 +154,12 @@ void Player::changeSprite()
 		if (m_currentSprite == 1)
 		{
 			m_sprite.setTextureRect(sf::IntRect(0, 0, 22, 57));
+			m_sprite.setOrigin(11, 57);
 		}
 		else if (m_currentSprite == 2)
 		{
 			m_sprite.setTextureRect(sf::IntRect(23, 0, 22, 57));
+			m_sprite.setOrigin(11, 57);
 		}
 		else if (m_currentSprite == 3)
 		{
@@ -144,18 +168,32 @@ void Player::changeSprite()
 		}
 		else if (m_currentSprite == 4)
 		{
-			m_sprite.setTextureRect(sf::IntRect(70, 0, 25, 57));
+			m_sprite.setTextureRect(sf::IntRect(70, 0, 26, 57));
 			m_sprite.setOrigin(13, 57);
 		}
 		else if (m_currentSprite == 5)
 		{
 			m_sprite.setTextureRect(sf::IntRect(97, 0, 28, 58));
 			m_sprite.setOrigin(14, 57);
+
+			legsDeployed = true;
 		}
 
 		m_sprite.setScale(sf::Vector2f(2, 2));
 		m_currentSprite++;
-		std::cout << "Time: " << m_animationClock.getElapsedTime().asSeconds() << ", sprite sheet: " << m_currentSprite << "\n";
 		m_animationClock.restart();
 	}
+}
+
+void Player::Respawn(float elect, float fuel)
+{
+	m_sprite.setPosition(1280 / 2.f, 0);
+	m_sprite.setRotation(0);
+	m_rocketEngineFuel = fuel;
+	m_electricity = elect;
+	m_currentSprite = 1;
+	legsDeployed = false;
+	//This sould be random
+	m_velocityVector.x = 10.f;
+	m_velocityVector.y = 50.f;
 }
