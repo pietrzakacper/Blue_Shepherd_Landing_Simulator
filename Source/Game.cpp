@@ -5,7 +5,7 @@ Game::Game(int width, int height, int fps)
 	m_window.create(sf::VideoMode(width, height), "Blue Shepherd Landing Simulator | 0.1", sf::Style::Close);
 	m_window.setFramerateLimit(fps);
 
-	m_player = new Player("Data/rocketspritesheet.png", sf::Vector2f(0, 0), 100000, 100000, m_GRAVITY);
+	m_player = new Player("Data/RocketSheet.png", sf::Vector2f(0, 0), 100000, 100000, m_GRAVITY);
 	m_background = new GraphicAttributes("Data/Concept.png");
 	m_floor = new GraphicAttributes("Data/landingzone.png");
 	m_floor->SetPosition(sf::Vector2f((1280 / 2) - m_floor->GetSprite().getGlobalBounds().width / 2, 720 - m_floor->GetSprite().getGlobalBounds().height));
@@ -47,7 +47,7 @@ void Game::drawAll()
 {
 	m_window.clear();
 
-	//m_window.draw(*m_background);
+	m_window.draw(*m_background);
 	m_window.draw(*m_gui);
 	m_window.draw(*m_player->partSys);
 	m_window.draw(*m_player);

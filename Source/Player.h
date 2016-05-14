@@ -14,6 +14,8 @@ class Player :public GameObject
 	float gravity;
 	bool horizontalInput = false;
 	bool isEngineOn = false;
+	sf::Clock m_animationClock;
+	int m_currentSprite;
 
 public:
 	Player(std::string texturePath, sf::Vector2f velVec, float fuel, float elect, float grav);
@@ -22,7 +24,9 @@ public:
 	void CheckRealTimeEvents();
 	void CheckEvents(sf::Event & event);
 	ParticleSystem* partSys;
+
 private:
 	void decreaseFuel();
 	void decreaseElectricity();
+	void changeSprite();
 };
