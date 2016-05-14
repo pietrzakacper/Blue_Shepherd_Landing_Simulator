@@ -9,6 +9,7 @@ Game::Game(int width, int height, int fps)
 	m_background = new GraphicAttributes("Data/Concept.png");
 	m_floor = new GraphicAttributes("Data/landingzone.png");
 	m_floor->SetPosition(sf::Vector2f((1280 / 2) - m_floor->GetSprite().getGlobalBounds().width / 2, 720 - m_floor->GetSprite().getGlobalBounds().height));
+	m_gui = new GUI(width, height, std::string("Data/font.ttf"));
 }
 
 void Game::Play()
@@ -47,6 +48,7 @@ void Game::drawAll()
 	m_window.clear();
 
 	//m_window.draw(*m_background);
+	m_window.draw(*m_gui);
 	m_window.draw(*m_player->partSys);
 	m_window.draw(*m_player);
 
@@ -58,6 +60,7 @@ void Game::drawAll()
 void Game::updateAll(float fps)
 {
 	m_player->Update(fps, 0);
+	m_gui->Update(m_player->GetSprite().getRotation(), m_player->GetVelocityVector().y, sf::Vector2i(25, 345), 150);
 }
 
 void Game::handleCollisions()
