@@ -72,23 +72,36 @@ void Player::CheckRealTimeEvents()
 	{
 		if (sf::Keyboard::isKeyPressed(sf::Keyboard::A) && m_velocityVector.x > -300.f)
 		{
-			m_velocityVector.x -= steerForce;
 			rotateAngleValue = -20.f;
 			horizontalInput = true;
+			if (isEngineOn)
+			{
+				m_velocityVector.x -= steerForce * 1.5;
+			}
+			else
+			{
+				m_velocityVector.x -= steerForce;
+			}
 		}
 
 		else if (sf::Keyboard::isKeyPressed(sf::Keyboard::D) && m_velocityVector.x < 300.f)
 		{
-			m_velocityVector.x += steerForce;
 			rotateAngleValue = 20.f;
 			horizontalInput = true;
+			if (isEngineOn)
+			{
+				m_velocityVector.x += steerForce * 1.5;
+			}
+			else
+			{
+				m_velocityVector.x += steerForce;
+			}
 		}
 		else
 		{
 			horizontalInput = false;
 		}
 
-		isEngineOn = false;
 		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Space) && m_rocketEngineFuel > 0)
 		{
 			if (m_velocityVector.y > -180.f)
@@ -99,6 +112,10 @@ void Player::CheckRealTimeEvents()
 			if (!isEngineOn)
 			{
 				isEngineOn = true;
+			}
+			else
+			{
+				isEngineOn = false;
 			}
 		}
 	}
@@ -180,16 +197,18 @@ void Player::changeSprite()
 	}
 }
 
+
 void Player::Respawn(float elect, float fuel)
 {
 	isEngineOn = false;
-	m_sprite.setPosition(1280 / 2.f, 0);
-	m_sprite.setRotation(0);
+
 	m_rocketEngineFuel = fuel;
 	m_electricity = elect;
 	m_currentSprite = 1;
 	legsDeployed = false;
-	//This sould be random
-	m_velocityVector.x = 10.f;
-	m_velocityVector.y = 50.f;
+
+	m_sprite.setPosition(rand() % 1200 + 200, 0);
+	m_sprite.setRotation(rand() % 20 - 20);
+	m_velocityVector.x = rand() % -50;
+	m_velocityVector.y = rand() % 50;
 }
