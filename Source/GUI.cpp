@@ -25,7 +25,7 @@ void GUI::draw(sf::RenderTarget & target, sf::RenderStates state) const
 	sf::Text speedText("Speed: " + std::to_string(m_speed), m_font);
 	sf::Text electText("Electricity: " + std::to_string(m_electricity), m_font);
 	sf::Text fuelText("Fuel: " + std::to_string(m_fuel), m_font);
-	sf::Text landingGearDeployed("Langing gear: \7", m_font);
+	sf::Text landingGearDeployed("Landing gear: \7", m_font);
 	
 	angleText.setColor(sf::Color::Green);
 	speedText.setColor(sf::Color::Green);
