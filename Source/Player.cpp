@@ -187,6 +187,7 @@ void Player::changeSprite()
 
 void Player::Respawn(float elect, float fuel)
 {
+	isEngineOn = false;
 	m_sprite.setPosition(1280 / 2.f, 0);
 	m_sprite.setRotation(0);
 	m_rocketEngineFuel = fuel;
