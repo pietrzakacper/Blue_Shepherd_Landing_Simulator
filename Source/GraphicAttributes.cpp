@@ -8,7 +8,7 @@ GraphicAttributes::GraphicAttributes(std::string texturePath)
 	}
 
 	m_sprite.setTexture(m_texture);
-	m_texture.setSmooth(true);
+//	m_texture.setSmooth(true);
 }
 
 sf::Texture GraphicAttributes::GetTexture()

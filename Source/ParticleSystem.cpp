@@ -7,8 +7,7 @@ emitterPosition(0, 0)
 {
 	for (int i = 0; i < count; i++)
 	{
-		
-		m_vertices[i].color = sf::Color::Red;
+		m_vertices[i].color = sf::Color::Yellow;
 	}
 }
 
