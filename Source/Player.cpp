@@ -87,6 +87,7 @@ void Player::CheckRealTimeEvents()
 			horizontalInput = false;
 		}
 
+		isEngineOn = false;
 		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Space) && m_rocketEngineFuel)
 		{
 			if (m_velocityVector.y > -180.f)
@@ -97,13 +98,6 @@ void Player::CheckRealTimeEvents()
 			if (!isEngineOn)
 			{
 				isEngineOn = true;
-			}
-			else
-			{
-				if (isEngineOn)
-				{
-					isEngineOn = false;
-				}
 			}
 		}
 	}
