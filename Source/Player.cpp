@@ -9,7 +9,7 @@ Player::Player(std::string texturePath, sf::Vector2f velVec, float fuel, float e
 	m_sprite.setTextureRect(sf::IntRect(0, 0, 22, 57));
 	m_sprite.setScale(sf::Vector2f(2, 2));
 	//TODO change pivot here and consider this while checking collisions
-	
+
 	m_animationClock.restart();
 	m_currentSprite = 1;
 
@@ -33,34 +33,35 @@ bool Player::LegsDeployed()
 
 void Player::Update(float fps, float wind)
 {
+
 	changeSprite();
 	decreaseElectricity(fps);
 	partSys->SetEmitterPosition(m_sprite.getPosition());
-	
+
 	partSys->Update(fps, isEngineOn);
 	m_velocityVector.y += gravity;
 	m_velocityVector.x += wind;
 	m_sprite.move(m_velocityVector.x * fps, m_velocityVector.y * fps);
-	
+
 	if (horizontalInput)
 	{
-		m_sprite.rotate(rotateAngleValue * fps );
+		m_sprite.rotate(rotateAngleValue * fps);
 	}
 	else
 	{
 		if (m_sprite.getRotation() > 359.0f || m_sprite.getRotation() < 1.0f)m_sprite.setRotation(0.f);
 		else
 		{
-		if (m_sprite.getRotation() > 180)m_sprite.rotate(0.05f * fps * fabs(m_velocityVector.y));
-		else if (m_sprite.getRotation() < 180)m_sprite.rotate(-0.05f * fps * fabs(m_velocityVector.y));
-		//TODO enhance rotation and make it relative to Y axis speed
+			if (m_sprite.getRotation() > 180)m_sprite.rotate(0.05f * fps * fabs(m_velocityVector.y));
+			else if (m_sprite.getRotation() < 180)m_sprite.rotate(-0.05f * fps * fabs(m_velocityVector.y));
+			//TODO enhance rotation and make it relative to Y axis speed
 		}
 	}
 
 	if (isEngineOn)
 		decreaseFuel();
-		
-	m_velocityVector.x *= 0.95; 
+
+	m_velocityVector.x *= 0.95;
 }
 
 void Player::CheckRealTimeEvents()
@@ -71,37 +72,24 @@ void Player::CheckRealTimeEvents()
 	{
 		if (sf::Keyboard::isKeyPressed(sf::Keyboard::A) && m_velocityVector.x > -300.f)
 		{
+			m_velocityVector.x -= steerForce;
 			rotateAngleValue = -20.f;
 			horizontalInput = true;
-			if (isEngineOn)
-			{
-				m_velocityVector.x -= steerForce * 1.5;
-			}
-			else
-			{
-				m_velocityVector.x -= steerForce;
-			}
 		}
 
 		else if (sf::Keyboard::isKeyPressed(sf::Keyboard::D) && m_velocityVector.x < 300.f)
 		{
+			m_velocityVector.x += steerForce;
 			rotateAngleValue = 20.f;
 			horizontalInput = true;
-			if (isEngineOn)
-			{
-				m_velocityVector.x += steerForce * 1.5;
-			}
-			else
-			{
-				m_velocityVector.x += steerForce;
-			}
 		}
 		else
 		{
 			horizontalInput = false;
 		}
-	
-		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Space) && m_rocketEngineFuel)
+
+		isEngineOn = false;
+		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Space) && m_rocketEngineFuel > 0)
 		{
 			if (m_velocityVector.y > -180.f)
 			{
@@ -113,30 +101,26 @@ void Player::CheckRealTimeEvents()
 				isEngineOn = true;
 			}
 		}
-		else
-		{
-			isEngineOn = false;
-		}
 	}
 
-	
+
 }
 
 void Player::CheckEvents(sf::Event & event)
 {
 	if (event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::Space)
 	{
-		//m_sprite.setTextureRect(sf::IntRect(0, 0, 58, 134));
+
 	}
 	else if (event.type == sf::Event::KeyReleased && event.key.code == sf::Keyboard::Space)
 	{
-		//m_sprite.setTextureRect(sf::IntRect(58, 0, 58, 134));
+		isEngineOn = false;
 	}
 }
 
 void Player::decreaseFuel()
 {
-	if (!m_rocketEngineFuel)
+	if (m_rocketEngineFuel <= 0)
 	{
 		isEngineOn = false;
 		return;
@@ -199,21 +183,13 @@ void Player::changeSprite()
 void Player::Respawn(float elect, float fuel)
 {
 	isEngineOn = false;
-	
+	m_sprite.setPosition(1280 / 2.f, 0);
+	m_sprite.setRotation(0);
 	m_rocketEngineFuel = fuel;
 	m_electricity = elect;
 	m_currentSprite = 1;
 	legsDeployed = false;
-
-	m_sprite.setPosition(rand() % 1200 +200, 0);
-	m_sprite.setRotation(rand() % 20 - 20);
-	m_velocityVector.x = rand() % -50;
-	m_velocityVector.y = rand() % 50;
 	//This sould be random
-	/*
-	m_sprite.setPosition(1280 / 2.f, 0);
-	m_sprite.setRotation(0);
 	m_velocityVector.x = 10.f;
 	m_velocityVector.y = 50.f;
-	*/	
 }
