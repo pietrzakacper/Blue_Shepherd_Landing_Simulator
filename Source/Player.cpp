@@ -33,6 +33,7 @@ bool Player::LegsDeployed()
 
 void Player::Update(float fps, float wind)
 {
+	
 	changeSprite();
 	decreaseElectricity(fps);
 	partSys->SetEmitterPosition(m_sprite.getPosition());
@@ -88,7 +89,7 @@ void Player::CheckRealTimeEvents()
 		}
 
 		isEngineOn = false;
-		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Space) && m_rocketEngineFuel)
+		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Space) && m_rocketEngineFuel > 0)
 		{
 			if (m_velocityVector.y > -180.f)
 			{
@@ -109,17 +110,17 @@ void Player::CheckEvents(sf::Event & event)
 {
 	if (event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::Space)
 	{
-		//m_sprite.setTextureRect(sf::IntRect(0, 0, 58, 134));
+		
 	}
 	else if (event.type == sf::Event::KeyReleased && event.key.code == sf::Keyboard::Space)
 	{
-		//m_sprite.setTextureRect(sf::IntRect(58, 0, 58, 134));
+		isEngineOn = false;
 	}
 }
 
 void Player::decreaseFuel()
 {
-	if (!m_rocketEngineFuel)
+	if (m_rocketEngineFuel <= 0)
 	{
 		isEngineOn = false;
 		return;
