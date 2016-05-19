@@ -33,10 +33,10 @@ void Game::Play()
 		}
 
 		handleCollisions(); 
-
+		
 		updateAll(frameTime.asSeconds());
 		drawAll();
-
+		
 		frameTime = frameClock.restart();
 	}
 	

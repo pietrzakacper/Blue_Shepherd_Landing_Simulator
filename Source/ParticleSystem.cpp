@@ -31,7 +31,7 @@ void ParticleSystem::Update(float elapsed , bool spawnNew)
 	
 }
 
-void ParticleSystem::SetEmitterPosition(sf::Vector2f position)
+void ParticleSystem::SetEmitterPosition(sf::Vector2f  position)
 {
 	emitterPosition = position;
 }

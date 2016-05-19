@@ -3,12 +3,11 @@
 Player::Player(std::string texturePath, sf::Vector2f velVec, float fuel, float elect, float grav)
 	:GameObject(texturePath, velVec),
 	gravity(grav),
-	partSys(new ParticleSystem(500))
+	partSys(new ParticleSystem(200))
 {
 	m_sprite.setOrigin(11, 57);
 	m_sprite.setTextureRect(sf::IntRect(0, 0, 22, 57));
 	m_sprite.setScale(sf::Vector2f(2, 2));
-	//TODO change pivot here and consider this while checking collisions
 
 	m_animationClock.restart();
 	m_currentSprite = 1;
@@ -34,10 +33,9 @@ bool Player::LegsDeployed()
 void Player::Update(float fps, float wind)
 {
 
-	changeSprite();
+	if(!legsDeployed)changeSprite();
 	decreaseElectricity(fps);
 	partSys->SetEmitterPosition(m_sprite.getPosition());
-
 	partSys->Update(fps, isEngineOn);
 	m_velocityVector.y += gravity;
 	m_velocityVector.x += wind;
@@ -54,7 +52,6 @@ void Player::Update(float fps, float wind)
 		{
 			if (m_sprite.getRotation() > 180)m_sprite.rotate(0.05f * fps * fabs(m_velocityVector.y));
 			else if (m_sprite.getRotation() < 180)m_sprite.rotate(-0.05f * fps * fabs(m_velocityVector.y));
-			//TODO enhance rotation and make it relative to Y axis speed
 		}
 	}
 
@@ -151,46 +148,40 @@ void Player::decreaseElectricity(float fps)
 
 
 	if (horizontalInput)
-	{
 		val *= 2;
-	}
+
 
 	m_electricity -= val * fps;
 }
 
 void Player::changeSprite()
 {
-	if (int(m_animationClock.getElapsedTime().asMilliseconds()) > 500 &&
-		m_currentSprite <= 5)
+	if (int(m_animationClock.getElapsedTime().asMilliseconds()) > 500)
 	{
-		if (m_currentSprite == 1)
+		switch(m_currentSprite)
 		{
+		case 1:
 			m_sprite.setTextureRect(sf::IntRect(0, 0, 22, 57));
 			m_sprite.setOrigin(11, 57);
-		}
-		else if (m_currentSprite == 2)
-		{
+			break;
+		case 2:
 			m_sprite.setTextureRect(sf::IntRect(23, 0, 22, 57));
 			m_sprite.setOrigin(11, 57);
-		}
-		else if (m_currentSprite == 3)
-		{
+			break;
+		case 3:
 			m_sprite.setTextureRect(sf::IntRect(45, 0, 24, 57));
 			m_sprite.setOrigin(12, 57);
-		}
-		else if (m_currentSprite == 4)
-		{
+			break;
+		case 4:
 			m_sprite.setTextureRect(sf::IntRect(70, 0, 26, 57));
 			m_sprite.setOrigin(13, 57);
-		}
-		else if (m_currentSprite == 5)
-		{
+			break;
+		case 5:
 			m_sprite.setTextureRect(sf::IntRect(97, 0, 28, 58));
 			m_sprite.setOrigin(14, 57);
-
 			legsDeployed = true;
-		}
-
+			break;
+	}
 		m_sprite.setScale(sf::Vector2f(2, 2));
 		m_currentSprite++;
 		m_animationClock.restart();
